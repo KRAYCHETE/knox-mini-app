@@ -297,6 +297,10 @@
         <span class="cmd-desc">Chama o assistente no grupo</span>
       </div>
       <div class="cmd-item">
+        <span class="cmd-badge">/perfil</span>
+        <span class="cmd-desc">Consulta XP e patente no RPG</span>
+      </div>
+      <div class="cmd-item">
         <span class="cmd-badge">/regras</span>
         <span class="cmd-desc">Exibe as regras no grupo</span>
       </div>
@@ -309,33 +313,32 @@
       <div class="card-title">📜 Diretrizes do Grupo</div>
       <div class="rule-item">
         <div class="rule-num">1</div>
-        <div><strong>Respeito Mútuo:</strong> Sem ofensas, brigas ou xingamentos. O filtro do Knox aplica mute automático de 15 minutos em palavras inapropriadas.</div>
+        <div><strong>Respeito Mútuo:</strong> Sem ofensas, brigas ou difamação. O filtro do Knox aplica mute automático de 15 minutos em palavras inadequadas.</div>
       </div>
       <div class="rule-item">
         <div class="rule-num">2</div>
-        <div><strong>Spam & Divulgações:</strong> Proibido envio de links externos não autorizados, esquemas piramidais ou canais de terceiros.</div>
+        <div><strong>Spam & Divulgações:</strong> Proibido envio de links externos não autorizados, esquemas suspeitos ou bots com conteúdo adulto.</div>
       </div>
       <div class="rule-item">
         <div class="rule-num">3</div>
-        <div><strong>Pirataria & Conteúdo Ilegal:</strong> Não compartilhe aplicativos modificados com malware ou links ilegais.</div>
+        <div><strong>Pirataria & Conteúdo Ilegal:</strong> Não compartilhe aplicações adulteradas com malware ou ligações fraudulentas.</div>
       </div>
       <div class="rule-item">
         <div class="rule-num">4</div>
-        <div><strong>Foco do Grupo:</strong> Mantenha o diálogo voltado para tecnologia, ecossistema Samsung Galaxy e Android.</div>
+        <div><strong>Foco da Comunidade:</strong> Mantenha as discussões focadas em tecnologia, hardware, ecossistema Samsung Galaxy e desenvolvimento Android.</div>
       </div>
     </div>
   </div>
 
   <script>
-    // Inicialização da API de Mini Apps do Telegram
     const tg = window.Telegram?.WebApp;
     if (tg) {
       tg.ready();
       tg.expand();
     }
 
-    // URL do Webhook no n8n (Substitua pela sua URL pública)
-    const N8N_WEBHOOK_URL = "https://SEU-TUNEL-CLOUDFLARE/webhook/knox-app";
+    // INSIRA AQUI O SEU LINK ATIVO DO CLOUDFLARE TUNNEL:
+    const N8N_WEBHOOK_URL = "https://SEU-TUNEL-CLOUDFLARE.trycloudflare.com/webhook/knox-app";
 
     function switchTab(tabName) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -377,14 +380,21 @@
       try {
         const res = await fetch(N8N_WEBHOOK_URL, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { 
+            "Content-Type": "application/json" 
+          },
           body: JSON.stringify({ message: query })
         });
+
+        if (!res.ok) {
+          throw new Error("HTTP error " + res.status);
+        }
 
         const data = await res.json();
         box.innerText = data.resposta || "Não obtive retorno da IA.";
       } catch (err) {
-        box.innerText = "Erro ao conectar com o Knox. Verifique se o servidor está ativo.";
+        console.error("Falha na chamada:", err);
+        box.innerText = "Erro ao conectar com o Knox. Verifique se o túnel e o fluxo n8n estão ativos.";
       } finally {
         btn.disabled = false;
         btn.innerText = "Perguntar ao Knox";
