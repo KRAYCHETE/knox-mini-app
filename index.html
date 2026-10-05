@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Knox Painel & IA</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --bg: #0f1015;
+      --card-bg: #1a1c23;
+      --accent: #2f69ff;
+      --accent-hover: #1f54e0;
+      --text: #ffffff;
+      --text-muted: #9aa0a6;
+      --border: #2a2d37;
+      --danger: #ff4757;
+      --warning: #ffa502;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 14px;
+      padding-bottom: 75px;
+    }
+
+    header {
+      text-align: center;
+      padding: 8px 0 16px;
+    }
+
+    header h1 {
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    header p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Navegação por Abas */
+    .tabs {
+      display: flex;
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 4px;
+      gap: 4px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 10px 4px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* Conteúdos das Abas */
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Aba IA */
+    textarea {
+      width: 100%;
+      background: #14161c;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      padding: 10px;
+      font-size: 0.9rem;
+      resize: none;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .quick-tags {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      margin: 8px 0;
+      padding-bottom: 4px;
+    }
+
+    .tag {
+      background: #252834;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      padding: 5px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .btn-send {
+      width: 100%;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-send:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .response-box {
+      margin-top: 12px;
+      padding: 12px;
+      background: #14161c;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      border: 1px solid var(--border);
+      display: none;
+    }
+
+    /* Aba Comandos */
+    .cmd-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cmd-item:last-child {
+      border-bottom: none;
+    }
+
+    .cmd-badge {
+      background: #232733;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      color: #64b5f6;
+    }
+
+    .cmd-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    /* Aba Regras */
+    .rule-item {
+      display: flex;
+      gap: 10px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+
+    .rule-num {
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.75rem;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🛡️ Knox Assistant</h1>
+    <p>Suporte Samsung, Android & Moderação</p>
+  </header>
+
+  <!-- Abas de navegação -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('ia')">Knox IA</button>
+    <button class="tab-btn" onclick="switchTab('comandos')">Comandos</button>
+    <button class="tab-btn" onclick="switchTab('regras')">Regras</button>
+  </div>
+
+  <!-- ABA 1: IA -->
+  <div id="tab-ia" class="tab-content active">
+    <div class="card">
+      <div class="card-title">💡 Dúvida Técnica</div>
+      <div class="quick-tags">
+        <span class="tag" onclick="setPrompt('Como reinstalar a stock ROM via Odin no S24?')">Instalar Stock ROM</span>
+        <span class="tag" onclick="setPrompt('Quais os riscos de desbloquear o bootloader?')">Bootloader Knox 0x1</span>
+        <span class="tag" onclick="setPrompt('Como desativar apps de operadora via ADB?')">Limpar Bloatware ADB</span>
+      </div>
+      <textarea id="promptInput" rows="4" placeholder="Digite sua pergunta sobre Android, Samsung, Odin, ADB..."></textarea>
+      <button class="btn-send" id="btnSubmit" onclick="perguntarKnox()">
+        Perguntar ao Knox
+      </button>
+    </div>
+
+    <div class="card" id="cardResponse" style="display:none;">
+      <div class="card-title">🤖 Resposta do Knox</div>
+      <div class="response-box" id="responseBox"></div>
+    </div>
+  </div>
+
+  <!-- ABA 2: Comandos -->
+  <div id="tab-comandos" class="tab-content">
+    <div class="card">
+      <div class="card-title">⚙️ Comandos de Moderação</div>
+      <div class="cmd-item">
+        <span class="cmd-badge">/mute [tempo]</span>
+        <span class="cmd-desc">Silencia o usuário (em resposta)</span>
+      </div>
+      <div class="cmd-item">
+        <span class="cmd-badge">/unmute</span>
+        <span class="cmd-desc">Remove o silêncio</span>
+      </div>
+      <div class="cmd-item">
+        <span class="cmd-badge">/ban</span>
+        <span class="cmd-desc">Bane membro infrator</span>
+      </div>
+      <div class="cmd-item">
+        <span class="cmd-badge">/warn</span>
+        <span class="cmd-desc">Adverte membro no chat</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">💬 Chat & IA</div>
+      <div class="cmd-item">
+        <span class="cmd-badge">Knox, [pergunta]</span>
+        <span class="cmd-desc">Chama o assistente no grupo</span>
+      </div>
+      <div class="cmd-item">
+        <span class="cmd-badge">/regras</span>
+        <span class="cmd-desc">Exibe as regras no grupo</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABA 3: Regras -->
+  <div id="tab-regras" class="tab-content">
+    <div class="card">
+      <div class="card-title">📜 Diretrizes do Grupo</div>
+      <div class="rule-item">
+        <div class="rule-num">1</div>
+        <div><strong>Respeito Mútuo:</strong> Sem ofensas, brigas ou xingamentos. O filtro do Knox aplica mute automático de 15 minutos em palavras inapropriadas.</div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-num">2</div>
+        <div><strong>Spam & Divulgações:</strong> Proibido envio de links externos não autorizados, esquemas piramidais ou canais de terceiros.</div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-num">3</div>
+        <div><strong>Pirataria & Conteúdo Ilegal:</strong> Não compartilhe aplicativos modificados com malware ou links ilegais.</div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-num">4</div>
+        <div><strong>Foco do Grupo:</strong> Mantenha o diálogo voltado para tecnologia, ecossistema Samsung Galaxy e Android.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Inicialização da API de Mini Apps do Telegram
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
+
+    // URL do Webhook no n8n (Substitua pela sua URL pública)
+    const N8N_WEBHOOK_URL = "https://SEU-TUNEL-CLOUDFLARE/webhook/knox-app";
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+      if (tabName === 'ia') {
+        document.querySelectorAll('.tab-btn')[0].classList.add('active');
+        document.getElementById('tab-ia').classList.add('active');
+      } else if (tabName === 'comandos') {
+        document.querySelectorAll('.tab-btn')[1].classList.add('active');
+        document.getElementById('tab-comandos').classList.add('active');
+      } else if (tabName === 'regras') {
+        document.querySelectorAll('.tab-btn')[2].classList.add('active');
+        document.getElementById('tab-regras').classList.add('active');
+      }
+    }
+
+    function setPrompt(text) {
+      const input = document.getElementById('promptInput');
+      input.value = text;
+      input.focus();
+    }
+
+    async function perguntarKnox() {
+      const input = document.getElementById('promptInput');
+      const btn = document.getElementById('btnSubmit');
+      const cardResp = document.getElementById('cardResponse');
+      const box = document.getElementById('responseBox');
+      const query = input.value.trim();
+
+      if (!query) return;
+
+      btn.disabled = true;
+      btn.innerText = "Consultando o Knox...";
+      cardResp.style.display = "block";
+      box.style.display = "block";
+      box.innerText = "Processando resposta...";
+
+      try {
+        const res = await fetch(N8N_WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: query })
+        });
+
+        const data = await res.json();
+        box.innerText = data.resposta || "Não obtive retorno da IA.";
+      } catch (err) {
+        box.innerText = "Erro ao conectar com o Knox. Verifique se o servidor está ativo.";
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Perguntar ao Knox";
+      }
+    }
+  </script>
+</body>
+</html>
