@@ -5,17 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Knox Painel & IA</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <!-- Biblioteca para renderizar Markdown limpo nas respostas da IA -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     :root {
-      --bg: #0f1015;
-      --card-bg: #1a1c23;
+      --bg: #0b0c10;
+      --card-bg: #141721;
+      --card-sub: #1b1f2c;
       --accent: #2f69ff;
       --accent-hover: #1f54e0;
       --text: #ffffff;
-      --text-muted: #9aa0a6;
-      --border: #2a2d37;
+      --text-muted: #8e95a5;
+      --border: #252a3a;
       --danger: #ff4757;
       --warning: #ffa502;
+      --success: #2ed573;
     }
 
     * {
@@ -30,16 +34,16 @@
       background-color: var(--bg);
       color: var(--text);
       padding: 14px;
-      padding-bottom: 75px;
+      padding-bottom: 85px;
     }
 
     header {
       text-align: center;
-      padding: 8px 0 16px;
+      padding: 6px 0 14px;
     }
 
     header h1 {
-      font-size: 1.3rem;
+      font-size: 1.35rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -53,14 +57,24 @@
     }
 
     /* Navegação por Abas */
+    .tabs-wrapper {
+      overflow-x: auto;
+      margin-bottom: 14px;
+      scrollbar-width: none;
+    }
+    .tabs-wrapper::-webkit-scrollbar {
+      display: none;
+    }
+
     .tabs {
       display: flex;
       background: var(--card-bg);
       border-radius: 12px;
       padding: 4px;
       gap: 4px;
-      margin-bottom: 16px;
       border: 1px solid var(--border);
+      min-width: 100%;
+      width: max-content;
     }
 
     .tab-btn {
@@ -68,11 +82,12 @@
       background: transparent;
       border: none;
       color: var(--text-muted);
-      padding: 10px 4px;
-      font-size: 0.85rem;
+      padding: 8px 12px;
+      font-size: 0.8rem;
       font-weight: 600;
       border-radius: 8px;
       cursor: pointer;
+      white-space: nowrap;
       transition: all 0.2s;
     }
 
@@ -107,26 +122,26 @@
     .card-title {
       font-size: 0.95rem;
       font-weight: 600;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
-    /* Aba IA */
-    textarea {
+    /* Formulários e Inputs */
+    textarea, input[type="text"] {
       width: 100%;
-      background: #14161c;
+      background: var(--card-sub);
       border: 1px solid var(--border);
       border-radius: 10px;
       color: var(--text);
-      padding: 10px;
-      font-size: 0.9rem;
-      resize: none;
+      padding: 10px 12px;
+      font-size: 0.88rem;
       outline: none;
+      transition: border 0.2s;
     }
 
-    textarea:focus {
+    textarea:focus, input[type="text"]:focus {
       border-color: var(--accent);
     }
 
@@ -136,10 +151,14 @@
       overflow-x: auto;
       margin: 8px 0;
       padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .quick-tags::-webkit-scrollbar {
+      display: none;
     }
 
     .tag {
-      background: #252834;
+      background: var(--card-sub);
       border: 1px solid var(--border);
       color: var(--text-muted);
       font-size: 0.75rem;
@@ -149,46 +168,66 @@
       cursor: pointer;
     }
 
-    .btn-send {
+    .btn-action {
       width: 100%;
       background: var(--accent);
       color: white;
       border: none;
       border-radius: 10px;
-      padding: 12px;
+      padding: 11px;
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
+      margin-top: 8px;
+      transition: background 0.2s;
     }
 
-    .btn-send:disabled {
+    .btn-action:active {
+      background: var(--accent-hover);
+    }
+
+    .btn-action:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
 
     .response-box {
-      margin-top: 12px;
+      margin-top: 10px;
       padding: 12px;
-      background: #14161c;
+      background: var(--card-sub);
       border-radius: 10px;
       font-size: 0.85rem;
       line-height: 1.5;
-      white-space: pre-wrap;
       border: 1px solid var(--border);
       display: none;
+      word-break: break-word;
     }
 
-    /* Aba Comandos */
+    .response-box pre {
+      background: #10121a;
+      padding: 8px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 6px 0;
+    }
+
+    .response-box code {
+      font-family: monospace;
+      font-size: 0.8rem;
+    }
+
+    /* Comandos */
     .cmd-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 0;
+      padding: 9px 0;
       border-bottom: 1px solid var(--border);
+      cursor: pointer;
     }
 
     .cmd-item:last-child {
@@ -196,40 +235,70 @@
     }
 
     .cmd-badge {
-      background: #232733;
+      background: #1c2233;
       padding: 4px 8px;
       border-radius: 6px;
       font-family: monospace;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: #64b5f6;
+      border: 1px solid #28334f;
     }
 
     .cmd-desc {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
       text-align: right;
     }
 
-    /* Aba Regras */
-    .rule-item {
+    /* Gamificação & RPG */
+    .profile-header {
       display: flex;
-      gap: 10px;
-      font-size: 0.85rem;
-      line-height: 1.4;
-      margin-bottom: 10px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
     }
 
-    .rule-num {
-      background: var(--accent);
-      color: #fff;
+    .rank-tag {
+      background: #1f273d;
+      color: #90caf9;
       font-size: 0.75rem;
-      width: 20px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      flex-shrink: 0;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .progress-bar-bg {
+      background: var(--card-sub);
+      border-radius: 10px;
+      height: 12px;
+      width: 100%;
+      overflow: hidden;
+      margin: 8px 0;
+      border: 1px solid var(--border);
+    }
+
+    .progress-bar-fill {
+      background: linear-gradient(90deg, #2f69ff, #64b5f6);
+      height: 100%;
+      width: 35%;
+      transition: width 0.3s;
+    }
+
+    /* Toast Flutuante */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(20, 23, 33, 0.95);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      display: none;
+      z-index: 1000;
     }
   </style>
 </head>
@@ -237,27 +306,32 @@
 
   <header>
     <h1>🛡️ Knox Assistant</h1>
-    <p>Suporte Samsung, Android & Moderação</p>
+    <p>Central Oficial de Suporte Galaxy, OTA & Moderação</p>
   </header>
 
-  <!-- Abas de navegação -->
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('ia')">Knox IA</button>
-    <button class="tab-btn" onclick="switchTab('comandos')">Comandos</button>
-    <button class="tab-btn" onclick="switchTab('regras')">Regras</button>
+  <!-- Navegação por Abas Horizontal -->
+  <div class="tabs-wrapper">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('ia')">🤖 Knox IA</button>
+      <button class="tab-btn" onclick="switchTab('comandos')">⚙️ Moderação</button>
+      <button class="tab-btn" onclick="switchTab('perfil')">🎮 Passaporte</button>
+      <button class="tab-btn" onclick="switchTab('roms')">📦 ROM & OTA</button>
+      <button class="tab-btn" onclick="switchTab('regras')">📜 Regras</button>
+    </div>
   </div>
 
   <!-- ABA 1: IA -->
   <div id="tab-ia" class="tab-content active">
     <div class="card">
-      <div class="card-title">💡 Dúvida Técnica</div>
+      <div class="card-title">💡 Dúvida Técnica ou Suporte Samsung</div>
       <div class="quick-tags">
-        <span class="tag" onclick="setPrompt('Como reinstalar a stock ROM via Odin no S24?')">Instalar Stock ROM</span>
-        <span class="tag" onclick="setPrompt('Quais os riscos de desbloquear o bootloader?')">Bootloader Knox 0x1</span>
-        <span class="tag" onclick="setPrompt('Como desativar apps de operadora via ADB?')">Limpar Bloatware ADB</span>
+        <span class="tag" onclick="setPrompt('Como reinstalar a Stock ROM usando Odin no Brasil (ZTO)?')">Stock ROM & Odin</span>
+        <span class="tag" onclick="setPrompt('Quais os riscos de disparar o Knox para 0x1 desbloqueando o bootloader?')">Knox 0x1 Garantia</span>
+        <span class="tag" onclick="setPrompt('Como remover bloatware de operadora via comandos ADB?')">Limpar Bloatware ADB</span>
+        <span class="tag" onclick="setPrompt('Como funciona a garantia e atualização OTA de aparelhos ZTO?')">Atualização OTA ZTO</span>
       </div>
-      <textarea id="promptInput" rows="4" placeholder="Digite sua pergunta sobre Android, Samsung, Odin, ADB..."></textarea>
-      <button class="btn-send" id="btnSubmit" onclick="perguntarKnox()">
+      <textarea id="promptInput" rows="4" placeholder="Pergunte sobre modo download, Odin, root, One UI, kernels, ADB..."></textarea>
+      <button class="btn-action" id="btnSubmit" onclick="perguntarKnox()">
         Perguntar ao Knox
       </button>
     </div>
@@ -271,89 +345,172 @@
   <!-- ABA 2: Comandos -->
   <div id="tab-comandos" class="tab-content">
     <div class="card">
-      <div class="card-title">⚙️ Comandos de Moderação</div>
-      <div class="cmd-item">
-        <span class="cmd-badge">/mute [tempo]</span>
-        <span class="cmd-desc">Silencia o usuário (em resposta)</span>
-      </div>
-      <div class="cmd-item">
-        <span class="cmd-badge">/unmute</span>
-        <span class="cmd-desc">Remove o silêncio</span>
-      </div>
-      <div class="cmd-item">
-        <span class="cmd-badge">/ban</span>
-        <span class="cmd-desc">Bane membro infrator</span>
-      </div>
-      <div class="cmd-item">
+      <div class="card-title">🛡️ Comandos de Moderação (Toque p/ copiar)</div>
+      <div class="cmd-item" onclick="copiarComando('/warn')">
         <span class="cmd-badge">/warn</span>
-        <span class="cmd-desc">Adverte membro no chat</span>
+        <span class="cmd-desc">Aplica 1 advertência (3 = Mute 3d)</span>
+      </div>
+      <div class="cmd-item" onclick="copiarComando('/unwarn')">
+        <span class="cmd-badge">/unwarn</span>
+        <span class="cmd-desc">Remove 1 advertência</span>
+      </div>
+      <div class="cmd-item" onclick="copiarComando('/resetwarns')">
+        <span class="cmd-badge">/resetwarns</span>
+        <span class="cmd-desc">Limpa todos os avisos (0/3)</span>
+      </div>
+      <div class="cmd-item" onclick="copiarComando('/mute')">
+        <span class="cmd-badge">/mute</span>
+        <span class="cmd-desc">Silencia o usuário marcado</span>
+      </div>
+      <div class="cmd-item" onclick="copiarComando('/unmute')">
+        <span class="cmd-badge">/unmute</span>
+        <span class="cmd-desc">Remove o silenciamento</span>
+      </div>
+      <div class="cmd-item" onclick="copiarComando('/ban')">
+        <span class="cmd-badge">/ban</span>
+        <span class="cmd-desc">Bane e adiciona à Blacklist</span>
+      </div>
+      <div class="cmd-item" onclick="copiarComando('/unban')">
+        <span class="cmd-badge">/unban</span>
+        <span class="cmd-desc">Desbane o membro</span>
+      </div>
+      <div class="cmd-item" onclick="copiarComando('/lock')">
+        <span class="cmd-badge">/lock</span>
+        <span class="cmd-desc">Tranca o chat para membros</span>
+      </div>
+      <div class="cmd-item" onclick="copiarComando('/unlock')">
+        <span class="cmd-badge">/unlock</span>
+        <span class="cmd-desc">Destranca o envio de mensagens</span>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">💬 Chat & IA</div>
-      <div class="cmd-item">
-        <span class="cmd-badge">Knox, [pergunta]</span>
-        <span class="cmd-desc">Chama o assistente no grupo</span>
+      <div class="card-title">🔒 Gestão de Blacklist (PV do Bot)</div>
+      <div class="cmd-item" onclick="copiarComando('/addban [ID]')">
+        <span class="cmd-badge">/addban [ID]</span>
+        <span class="cmd-desc">Insere ID na lista negra</span>
       </div>
-      <div class="cmd-item">
-        <span class="cmd-badge">/perfil</span>
-        <span class="cmd-desc">Consulta XP e patente no RPG</span>
-      </div>
-      <div class="cmd-item">
-        <span class="cmd-badge">/regras</span>
-        <span class="cmd-desc">Exibe as regras no grupo</span>
+      <div class="cmd-item" onclick="copiarComando('/unbanlist [ID]')">
+        <span class="cmd-badge">/unbanlist [ID]</span>
+        <span class="cmd-desc">Remove ID da lista negra</span>
       </div>
     </div>
   </div>
 
-  <!-- ABA 3: Regras -->
+  <!-- ABA 3: Passaporte & Gamificação -->
+  <div id="tab-perfil" class="tab-content">
+    <div class="card">
+      <div class="card-title">🎖️ Seu Passaporte Técnico</div>
+      <div class="profile-header">
+        <div>
+          <strong id="userName">Usuário Telegram</strong>
+          <p style="font-size: 0.75rem; color: var(--text-muted);" id="userHandle">@comunidade</p>
+        </div>
+        <span class="rank-tag" id="userRank">🔌 Recruta Android</span>
+      </div>
+
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressFill" style="width: 38%;"></div>
+      </div>
+      <p style="font-size: 0.75rem; color: var(--text-muted); text-align: right;" id="xpText">115 / 300 pts (38%)</p>
+
+      <div style="margin-top: 12px; font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
+        💡 <strong>Como pontuar:</strong> Cada interação no grupo gera +15 XP. Ajudar um membro que agradece com <em>"obrigado/valeu/tmj"</em> concede <strong>+50 XP</strong> de reputação!
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🏆 Tabela de Patentes</div>
+      <div class="cmd-item">
+        <span style="font-size: 0.82rem;">🔌 Recruta Android</span>
+        <span class="cmd-desc">0 - 99 pts</span>
+      </div>
+      <div class="cmd-item">
+        <span style="font-size: 0.82rem;">🛠️ Técnico Júnior</span>
+        <span class="cmd-desc">100 - 299 pts</span>
+      </div>
+      <div class="cmd-item">
+        <span style="font-size: 0.82rem;">⚙️ Custom ROM Flasher</span>
+        <span class="cmd-desc">300 - 699 pts</span>
+      </div>
+      <div class="cmd-item">
+        <span style="font-size: 0.82rem;">⚡ Knox Enforcer</span>
+        <span class="cmd-desc">700 - 1499 pts</span>
+      </div>
+      <div class="cmd-item">
+        <span style="font-size: 0.82rem; color: #ffd700;">👑 Root Master (VIP)</span>
+        <span class="cmd-desc">1500+ pts</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABA 4: ROMs & Atualizações OTA -->
+  <div id="tab-roms" class="tab-content">
+    <div class="card">
+      <div class="card-title">🔍 Localizar Firmware Oficial (SamFw ZTO)</div>
+      <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 8px;">
+        Digite o código do modelo (ex: SM-S928B, SM-S918B, SM-A556E) para abrir direto o repositório oficial da Samsung Brasil.
+      </p>
+      <input type="text" id="modelInput" placeholder="Ex: SM-S928B" />
+      <button class="btn-action" onclick="buscarRom()">Abrir Firmware no SamFw</button>
+      <button class="btn-action" style="background: #232733; margin-top: 6px;" onclick="abrirChangelogSamsung()">Ver Changelog Oficial Samsung</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚡ Como Entrar no Modo Download</div>
+      <ol style="font-size: 0.8rem; color: var(--text-muted); margin-left: 18px; line-height: 1.5;">
+        <li>Desligue o seu Galaxy por completo.</li>
+        <li>Segure simultaneamente <strong>Volume +</strong> e <strong>Volume -</strong>.</li>
+        <li>Conecte o cabo USB ao PC mantendo os botões pressionados.</li>
+        <li>Na tela azul de Warning, pressione <strong>Volume +</strong> para confirmar.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ABA 5: Regras -->
   <div id="tab-regras" class="tab-content">
     <div class="card">
-      <div class="card-title">📜 Diretrizes do Grupo</div>
-      <div class="rule-item">
-        <div class="rule-num">1</div>
-        <div><strong>Respeito Mútuo:</strong> Sem ofensas, brigas ou difamação. O filtro do Knox aplica mute automático de 15 minutos em palavras inadequadas.</div>
-      </div>
-      <div class="rule-item">
-        <div class="rule-num">2</div>
-        <div><strong>Spam & Divulgações:</strong> Proibido envio de links externos não autorizados, esquemas suspeitos ou bots com conteúdo adulto.</div>
-      </div>
-      <div class="rule-item">
-        <div class="rule-num">3</div>
-        <div><strong>Pirataria & Conteúdo Ilegal:</strong> Não compartilhe aplicações adulteradas com malware ou ligações fraudulentas.</div>
-      </div>
-      <div class="rule-item">
-        <div class="rule-num">4</div>
-        <div><strong>Foco da Comunidade:</strong> Mantenha as discussões focadas em tecnologia, hardware, ecossistema Samsung Galaxy e desenvolvimento Android.</div>
+      <div class="card-title">📜 Diretrizes da Comunidade Galaxy</div>
+      <div style="font-size: 0.82rem; line-height: 1.5; color: var(--text-muted);">
+        <p style="margin-bottom: 8px;">🚫 <strong>Anti-Spam & Links Adultos:</strong> Bots adultos e disparos não autorizados acarretam exclusão imediata e banimento permanente na Blacklist.</p>
+        <p style="margin-bottom: 8px;">🤬 <strong>Filtro de Linguagem:</strong> O bot muta automaticamente por 15 minutos mensagens contendo ofensas ou palavras impróprias.</p>
+        <p style="margin-bottom: 8px;">⚠️ <strong>Sistema de Avisos:</strong> Ao acumular 3 advertências (/warn), o membro recebe restrição total por 3 dias.</p>
+        <p>📱 <strong>Foco:</strong> Conteúdos sobre hardware, Android, One UI e ecossistema Samsung.</p>
       </div>
     </div>
   </div>
+
+  <!-- Toast Notificação -->
+  <div class="toast" id="toast">Comando copiado!</div>
 
   <script>
     const tg = window.Telegram?.WebApp;
     if (tg) {
       tg.ready();
       tg.expand();
+
+      // Ajusta dados com as informações reais do Telegram
+      const user = tg.initDataUnsafe?.user;
+      if (user) {
+        document.getElementById('userName').innerText = (user.first_name || '') + (user.last_name ? ' ' + user.last_name : '');
+        document.getElementById('userHandle').innerText = user.username ? '@' + user.username : 'ID: ' + user.id;
+      }
     }
 
-    // INSIRA AQUI O SEU LINK ATIVO DO CLOUDFLARE TUNNEL:
+    // INSIRA AQUI O SEU LINK ATIVO DO CLOUDFLARE TUNNEL (ENDPOINT DO N8N):
     const N8N_WEBHOOK_URL = "https://lounge-spouse-procurement-then.trycloudflare.com/webhook/knox-app";
 
     function switchTab(tabName) {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
+
+      const tabs = ['ia', 'comandos', 'perfil', 'roms', 'regras'];
+      document.querySelectorAll('.tab-btn').forEach((b, idx) => {
+        b.classList.toggle('active', tabs[idx] === tabName);
+      });
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
 
-      if (tabName === 'ia') {
-        document.querySelectorAll('.tab-btn')[0].classList.add('active');
-        document.getElementById('tab-ia').classList.add('active');
-      } else if (tabName === 'comandos') {
-        document.querySelectorAll('.tab-btn')[1].classList.add('active');
-        document.getElementById('tab-comandos').classList.add('active');
-      } else if (tabName === 'regras') {
-        document.querySelectorAll('.tab-btn')[2].classList.add('active');
-        document.getElementById('tab-regras').classList.add('active');
-      }
+      const activeContent = document.getElementById(`tab-${tabName}`);
+      if (activeContent) activeContent.classList.add('active');
     }
 
     function setPrompt(text) {
@@ -371,34 +528,57 @@
 
       if (!query) return;
 
+      if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+
       btn.disabled = true;
       btn.innerText = "Consultando o Knox...";
       cardResp.style.display = "block";
       box.style.display = "block";
-      box.innerText = "Processando resposta...";
+      box.innerHTML = "<em>Processando resposta...</em>";
 
       try {
         const res = await fetch(N8N_WEBHOOK_URL, {
           method: "POST",
-          headers: { 
-            "Content-Type": "application/json" 
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: query })
         });
 
-        if (!res.ok) {
-          throw new Error("HTTP error " + res.status);
-        }
+        if (!res.ok) throw new Error("HTTP error " + res.status);
 
         const data = await res.json();
-        box.innerText = data.resposta || "Não obtive retorno da IA.";
+        const textoResposta = data.resposta || "Não obtive retorno da IA.";
+        box.innerHTML = marked.parse(textoResposta);
+        if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
       } catch (err) {
-        console.error("Falha na chamada:", err);
+        console.error(err);
         box.innerText = "Erro ao conectar com o Knox. Verifique se o túnel e o fluxo n8n estão ativos.";
+        if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
       } finally {
         btn.disabled = false;
         btn.innerText = "Perguntar ao Knox";
       }
+    }
+
+    function copiarComando(cmd) {
+      navigator.clipboard.writeText(cmd);
+      if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+
+      const toast = document.getElementById('toast');
+      toast.innerText = `Copiado: ${cmd}`;
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 2000);
+    }
+
+    function buscarRom() {
+      const model = document.getElementById('modelInput').value.trim().toUpperCase() || 'SM-S928B';
+      const url = `https://samfw.com/firmware/${model}/ZTO`;
+      window.open(url, '_blank');
+    }
+
+    function abrirChangelogSamsung() {
+      const model = document.getElementById('modelInput').value.trim().toUpperCase() || 'SM-S928B';
+      const url = `https://doc.samsungmobile.com/${model}/ZTO/doc.html`;
+      window.open(url, '_blank');
     }
   </script>
 </body>
