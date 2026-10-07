@@ -9,7 +9,7 @@
   <style>
     :root {
       --oneui-bg: #07090e;
-      --glass-surface: rgba(18, 24, 38, 0.58);
+      --glass-surface: rgba(18, 24, 38, 0.62);
       --glass-surface-sub: rgba(28, 36, 56, 0.45);
       --glass-border: rgba(255, 255, 255, 0.14);
       --glass-specular: linear-gradient(135deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.03) 60%, transparent 100%);
@@ -35,13 +35,14 @@
       background-color: var(--oneui-bg);
       color: var(--text-primary);
       padding: 16px;
-      padding-bottom: 100px;
+      padding-bottom: 110px;
       min-height: 100vh;
       position: relative;
       overflow-x: hidden;
+      touch-action: pan-y;
     }
 
-    /* Esferas Líquidas de Fundo (Apple Liquid Mesh) */
+    /* Esferas Líquidas Apple Mesh */
     .liquid-orb {
       position: fixed;
       border-radius: 50%;
@@ -84,14 +85,13 @@
       100% { transform: translate(35px, 45px) scale(1.12); }
     }
 
-    /* Ícone Samsung Knox SVG Inline */
     .knox-svg {
       display: inline-block;
       vertical-align: middle;
       fill: currentColor;
+      flex-shrink: 0;
     }
 
-    /* Header One UI Large Display */
     .oneui-header {
       padding: 24px 8px 18px;
     }
@@ -133,7 +133,12 @@
       font-weight: 500;
     }
 
-    /* Cards em Liquid Glass */
+    /* Container com suporte a Swipe */
+    #swipe-container {
+      width: 100%;
+      position: relative;
+    }
+
     .liquid-card {
       background: var(--glass-surface);
       backdrop-filter: blur(36px) saturate(190%);
@@ -171,7 +176,6 @@
       gap: 8px;
     }
 
-    /* Área Galaxy AI Studio */
     .ai-glass-input {
       position: relative;
       border-radius: 20px;
@@ -205,7 +209,6 @@
       color: var(--text-tertiary);
     }
 
-    /* Chips e Tags Deslizantes */
     .quick-chips {
       display: flex;
       gap: 8px;
@@ -237,7 +240,6 @@
       color: #fff;
     }
 
-    /* Botão Liquid Glass com Gradiente */
     .btn-liquid {
       width: 100%;
       background: var(--oneui-gradient);
@@ -269,10 +271,10 @@
       box-shadow: none;
     }
 
-    /* Resposta da IA estilo Assistant Sheet */
+    /* Card de Resposta e Correção de Tabelas Markdown */
     .response-card {
-      background: rgba(10, 14, 24, 0.8);
-      border: 1px solid rgba(46, 110, 255, 0.3);
+      background: rgba(10, 14, 24, 0.88);
+      border: 1px solid rgba(46, 110, 255, 0.35);
       border-radius: 20px;
       padding: 14px;
       margin-top: 14px;
@@ -280,6 +282,48 @@
       line-height: 1.6;
       color: #dbe2f4;
       display: none;
+      width: 100%;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    /* Wrapper automático para rolagem de tabela */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 12px 0;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .response-card table {
+      width: 100%;
+      min-width: 440px;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      text-align: left;
+    }
+
+    .response-card th {
+      background: rgba(46, 110, 255, 0.25);
+      color: #ffffff;
+      padding: 10px;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      white-space: nowrap;
+    }
+
+    .response-card td {
+      padding: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      color: #c8d3ea;
+      vertical-align: top;
+      line-height: 1.4;
+    }
+
+    .response-card tr:last-child td {
+      border-bottom: none;
     }
 
     .response-card pre {
@@ -297,7 +341,6 @@
       color: #64d2ff;
     }
 
-    /* Tiles de Comandos */
     .cmd-tile {
       display: flex;
       justify-content: space-between;
@@ -334,7 +377,6 @@
       font-weight: 500;
     }
 
-    /* Passaporte Técnico One UI */
     .profile-hero {
       display: flex;
       align-items: center;
@@ -395,7 +437,6 @@
       transition: width 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
-    /* Inputs Samsung */
     .oneui-input {
       width: 100%;
       background: rgba(10, 14, 24, 0.75);
@@ -411,34 +452,41 @@
       border-color: var(--oneui-accent);
     }
 
-    /* Floating Pill Navigation Bar (Apple/One UI 9 Liquid) */
-    .liquid-navbar {
+    /* Barra Inferior com Suporte a Deslize / Rolagem */
+    .liquid-navbar-wrapper {
       position: fixed;
-      bottom: 16px;
-      left: 14px;
-      right: 14px;
-      max-width: 440px;
+      bottom: 14px;
+      left: 12px;
+      right: 12px;
+      max-width: 460px;
       margin: 0 auto;
-      background: rgba(15, 20, 32, 0.72);
+      z-index: 999;
+    }
+
+    .liquid-navbar {
+      background: rgba(15, 20, 32, 0.78);
       backdrop-filter: blur(34px) saturate(200%);
       -webkit-backdrop-filter: blur(34px) saturate(200%);
       border: 1px solid rgba(255, 255, 255, 0.18);
       border-radius: var(--radius-pill);
-      padding: 6px 8px;
+      padding: 6px;
       display: flex;
-      justify-content: space-between;
+      gap: 4px;
+      overflow-x: auto;
+      scrollbar-width: none;
       box-shadow: 
         0 20px 48px rgba(0, 0, 0, 0.65),
         inset 0 1px 0 rgba(255, 255, 255, 0.25);
-      z-index: 999;
     }
+    .liquid-navbar::-webkit-scrollbar { display: none; }
 
     .nav-item {
       flex: 1;
+      min-width: 70px;
       background: transparent;
       border: none;
       color: var(--text-tertiary);
-      padding: 6px 0;
+      padding: 6px 4px;
       border-radius: var(--radius-pill);
       cursor: pointer;
       display: flex;
@@ -446,6 +494,7 @@
       align-items: center;
       gap: 3px;
       transition: all 0.2s;
+      white-space: nowrap;
     }
 
     .nav-item .icon {
@@ -463,15 +512,10 @@
 
     .nav-item.active {
       color: #fff;
-      background: rgba(46, 110, 255, 0.25);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      background: rgba(46, 110, 255, 0.28);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
     }
 
-    .nav-item.active .icon {
-      transform: translateY(-1px);
-    }
-
-    /* Toast Flutuante */
     .toast-liquid {
       position: fixed;
       top: 24px;
@@ -498,13 +542,12 @@
       transform: translateX(-50%) translateY(0);
     }
 
-    /* Conteúdos */
     .tab-view {
       display: none;
-      animation: tabEnter 0.22s ease-out forwards;
     }
     .tab-view.active {
       display: block;
+      animation: tabEnter 0.22s ease-out forwards;
     }
 
     @keyframes tabEnter {
@@ -515,12 +558,10 @@
 </head>
 <body>
 
-  <!-- Esferas Líquidas Apple Mesh -->
   <div class="liquid-orb orb-1"></div>
   <div class="liquid-orb orb-2"></div>
   <div class="liquid-orb orb-3"></div>
 
-  <!-- Header One UI Large Display -->
   <header class="oneui-header">
     <div class="oneui-badge">
       <svg class="knox-svg" viewBox="0 0 24 24" width="13" height="13">
@@ -537,295 +578,298 @@
     <p>Painel Inteligente de Suporte Samsung & Moderação</p>
   </header>
 
-  <!-- ==================== ABA 1: GALAXY AI STUDIO ==================== -->
-  <main id="view-ia" class="tab-view active">
-    <div class="liquid-card">
-      <div class="card-title">
-        <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18" style="color: #4b89ff;">
-          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
-        </svg>
-        <span>Galaxy AI • Diagnóstico Técnico</span>
-      </div>
-
-      <div class="quick-chips">
-        <span class="chip" onclick="setPrompt('Como restaurar Stock ROM via Odin com CSC ZTO no S24?')">Stock ROM Odin</span>
-        <span class="chip" onclick="setPrompt('Quais os impactos de romper o efuse Knox para 0x1?')">Knox 0x1 & Garantia</span>
-        <span class="chip" onclick="setPrompt('Como remover bloatware e apps de operadora via ADB?')">Limpar Bloatware ADB</span>
-        <span class="chip" onclick="setPrompt('Como verificar o status de liberação da One UI no Brasil?')">Lançamentos ZTO</span>
-      </div>
-
-      <div class="ai-glass-input">
-        <textarea id="promptInput" rows="4" placeholder="Pergunte ao Knox sobre One UI, Odin, kernels, ADB, modo download ou bateria..."></textarea>
-      </div>
-
-      <button class="btn-liquid" id="btnSubmit" onclick="perguntarKnox()">
-        <svg class="knox-svg" viewBox="0 0 24 24" width="16" height="16">
-          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
-        </svg>
-        <span>Consultar Galaxy AI</span>
-      </button>
-
-      <div class="response-card" id="responseBox"></div>
-    </div>
-  </main>
-
-  <!-- ==================== ABA 2: MODERAÇÃO & COMANDOS ==================== -->
-  <main id="view-comandos" class="tab-view">
-    <div class="liquid-card">
-      <div class="card-title">
-        <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18" style="color: #4b89ff;">
-          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
-        </svg>
-        <span>Ações Rápidas de Moderação</span>
-      </div>
-
-      <div class="cmd-tile" onclick="copiarComando('/warn')">
-        <div>
-          <span class="cmd-pill">/warn</span>
-          <div class="cmd-desc" style="margin-top: 4px;">Aplica 1 advertência (3 avisos = Mute 3d)</div>
-        </div>
-        <span>📋</span>
-      </div>
-
-      <div class="cmd-tile" onclick="copiarComando('/unwarn')">
-        <div>
-          <span class="cmd-pill">/unwarn</span>
-          <div class="cmd-desc" style="margin-top: 4px;">Remove a última advertência</div>
-        </div>
-        <span>📋</span>
-      </div>
-
-      <div class="cmd-tile" onclick="copiarComando('/resetwarns')">
-        <div>
-          <span class="cmd-pill">/resetwarns</span>
-          <div class="cmd-desc" style="margin-top: 4px;">Zera o contador do membro (0/3)</div>
-        </div>
-        <span>📋</span>
-      </div>
-
-      <div class="cmd-tile" onclick="copiarComando('/mute')">
-        <div>
-          <span class="cmd-pill">/mute</span>
-          <div class="cmd-desc" style="margin-top: 4px;">Silencia o membro em resposta</div>
-        </div>
-        <span>📋</span>
-      </div>
-
-      <div class="cmd-tile" onclick="copiarComando('/unmute')">
-        <div>
-          <span class="cmd-pill">/unmute</span>
-          <div class="cmd-desc" style="margin-top: 4px;">Devolve as permissões de fala</div>
-        </div>
-        <span>📋</span>
-      </div>
-
-      <div class="cmd-tile" onclick="copiarComando('/ban')">
-        <div>
-          <span class="cmd-pill">/ban</span>
-          <div class="cmd-desc" style="margin-top: 4px;">Expulsa e adiciona à Blacklist</div>
-        </div>
-        <span>📋</span>
-      </div>
-
-      <div class="cmd-tile" onclick="copiarComando('/lock')">
-        <div>
-          <span class="cmd-pill">/lock</span>
-          <div class="cmd-desc" style="margin-top: 4px;">Tranca o envio de mensagens do chat</div>
-        </div>
-        <span>📋</span>
-      </div>
-
-      <div class="cmd-tile" onclick="copiarComando('/unlock')">
-        <div>
-          <span class="cmd-pill">/unlock</span>
-          <div class="cmd-desc" style="margin-top: 4px;">Destranca o chat para os membros</div>
-        </div>
-        <span>📋</span>
-      </div>
-    </div>
-
-    <div class="liquid-card">
-      <div class="card-title">
-        <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18" style="color: #ff4757;">
-          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
-        </svg>
-        <span>Gerenciamento de Blacklist (PV)</span>
-      </div>
-      <div class="cmd-tile" onclick="copiarComando('/addban [ID]')">
-        <div>
-          <span class="cmd-pill">/addban [ID]</span>
-          <div class="cmd-desc" style="margin-top: 4px;">Insere ID manualmente na Blacklist</div>
-        </div>
-        <span>📋</span>
-      </div>
-      <div class="cmd-tile" onclick="copiarComando('/unbanlist [ID]')">
-        <div>
-          <span class="cmd-pill">/unbanlist [ID]</span>
-          <div class="cmd-desc" style="margin-top: 4px;">Retira o ID da Blacklist do Knox</div>
-        </div>
-        <span>📋</span>
-      </div>
-    </div>
-  </main>
-
-  <!-- ==================== ABA 3: PASSAPORTE & REPUTAÇÃO ==================== -->
-  <main id="view-perfil" class="tab-view">
-    <div class="liquid-card">
-      <div class="profile-hero">
-        <div class="avatar-squircle">
-          <svg class="knox-svg" viewBox="0 0 24 24" width="32" height="32" style="color: #fff;">
+  <div id="swipe-container">
+    <!-- ABA 1: GALAXY AI -->
+    <main id="view-ia" class="tab-view active">
+      <div class="liquid-card">
+        <div class="card-title">
+          <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18" style="color: #4b89ff;">
             <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
           </svg>
+          <span>Galaxy AI • Diagnóstico Técnico</span>
         </div>
-        <div class="profile-info">
-          <h3 id="userName">Usuário Galaxy</h3>
-          <p id="userHandle">@comunidade</p>
-          <span class="pill-badge" id="userRank">
-            <svg class="knox-svg" viewBox="0 0 24 24" width="11" height="11">
+
+        <div class="quick-chips">
+          <span class="chip" onclick="setPrompt('Como restaurar Stock ROM via Odin com CSC ZTO no S24?')">Stock ROM Odin</span>
+          <span class="chip" onclick="setPrompt('Quais os impactos de romper o efuse Knox para 0x1?')">Knox 0x1 & Garantia</span>
+          <span class="chip" onclick="setPrompt('Como remover bloatware e apps de operadora via ADB?')">Limpar Bloatware ADB</span>
+          <span class="chip" onclick="setPrompt('Como verificar o status de liberação da One UI no Brasil?')">Lançamentos ZTO</span>
+        </div>
+
+        <div class="ai-glass-input">
+          <textarea id="promptInput" rows="4" placeholder="Pergunte ao Knox sobre One UI, Odin, kernels, ADB, modo download ou bateria..."></textarea>
+        </div>
+
+        <button class="btn-liquid" id="btnSubmit" onclick="perguntarKnox()">
+          <svg class="knox-svg" viewBox="0 0 24 24" width="16" height="16">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+          </svg>
+          <span>Consultar Galaxy AI</span>
+        </button>
+
+        <div class="response-card" id="responseBox"></div>
+      </div>
+    </main>
+
+    <!-- ABA 2: MODERAÇÃO -->
+    <main id="view-comandos" class="tab-view">
+      <div class="liquid-card">
+        <div class="card-title">
+          <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18" style="color: #4b89ff;">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+          </svg>
+          <span>Ações Rápidas de Moderação</span>
+        </div>
+
+        <div class="cmd-tile" onclick="copiarComando('/warn')">
+          <div>
+            <span class="cmd-pill">/warn</span>
+            <div class="cmd-desc" style="margin-top: 4px;">Aplica 1 advertência (3 avisos = Mute 3d)</div>
+          </div>
+          <span>📋</span>
+        </div>
+
+        <div class="cmd-tile" onclick="copiarComando('/unwarn')">
+          <div>
+            <span class="cmd-pill">/unwarn</span>
+            <div class="cmd-desc" style="margin-top: 4px;">Remove a última advertência</div>
+          </div>
+          <span>📋</span>
+        </div>
+
+        <div class="cmd-tile" onclick="copiarComando('/resetwarns')">
+          <div>
+            <span class="cmd-pill">/resetwarns</span>
+            <div class="cmd-desc" style="margin-top: 4px;">Zera o contador do membro (0/3)</div>
+          </div>
+          <span>📋</span>
+        </div>
+
+        <div class="cmd-tile" onclick="copiarComando('/mute')">
+          <div>
+            <span class="cmd-pill">/mute</span>
+            <div class="cmd-desc" style="margin-top: 4px;">Silencia o membro em resposta</div>
+          </div>
+          <span>📋</span>
+        </div>
+
+        <div class="cmd-tile" onclick="copiarComando('/unmute')">
+          <div>
+            <span class="cmd-pill">/unmute</span>
+            <div class="cmd-desc" style="margin-top: 4px;">Devolve as permissões de fala</div>
+          </div>
+          <span>📋</span>
+        </div>
+
+        <div class="cmd-tile" onclick="copiarComando('/ban')">
+          <div>
+            <span class="cmd-pill">/ban</span>
+            <div class="cmd-desc" style="margin-top: 4px;">Expulsa e adiciona à Blacklist</div>
+          </div>
+          <span>📋</span>
+        </div>
+
+        <div class="cmd-tile" onclick="copiarComando('/lock')">
+          <div>
+            <span class="cmd-pill">/lock</span>
+            <div class="cmd-desc" style="margin-top: 4px;">Tranca o envio de mensagens do chat</div>
+          </div>
+          <span>📋</span>
+        </div>
+
+        <div class="cmd-tile" onclick="copiarComando('/unlock')">
+          <div>
+            <span class="cmd-pill">/unlock</span>
+            <div class="cmd-desc" style="margin-top: 4px;">Destranca o chat para os membros</div>
+          </div>
+          <span>📋</span>
+        </div>
+      </div>
+
+      <div class="liquid-card">
+        <div class="card-title">
+          <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18" style="color: #ff4757;">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+          </svg>
+          <span>Gerenciamento de Blacklist (PV)</span>
+        </div>
+        <div class="cmd-tile" onclick="copiarComando('/addban [ID]')">
+          <div>
+            <span class="cmd-pill">/addban [ID]</span>
+            <div class="cmd-desc" style="margin-top: 4px;">Insere ID manualmente na Blacklist</div>
+          </div>
+          <span>📋</span>
+        </div>
+        <div class="cmd-tile" onclick="copiarComando('/unbanlist [ID]')">
+          <div>
+            <span class="cmd-pill">/unbanlist [ID]</span>
+            <div class="cmd-desc" style="margin-top: 4px;">Retira o ID da Blacklist do Knox</div>
+          </div>
+          <span>📋</span>
+        </div>
+      </div>
+    </main>
+
+    <!-- ABA 3: PASSAPORTE -->
+    <main id="view-perfil" class="tab-view">
+      <div class="liquid-card">
+        <div class="profile-hero">
+          <div class="avatar-squircle">
+            <svg class="knox-svg" viewBox="0 0 24 24" width="32" height="32" style="color: #fff;">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+            </svg>
+          </div>
+          <div class="profile-info">
+            <h3 id="userName">Usuário Galaxy</h3>
+            <p id="userHandle">@comunidade</p>
+            <span class="pill-badge" id="userRank">
+              <svg class="knox-svg" viewBox="0 0 24 24" width="11" height="11">
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+              </svg>
+              Knox Enforcer
+            </span>
+          </div>
+        </div>
+
+        <div class="card-title" style="margin-bottom: 2px;">
+          <span>Nível de Integridade & XP</span>
+        </div>
+        <div class="oneui-battery-bar">
+          <div class="oneui-battery-fill" id="progressFill" style="width: 58%;"></div>
+        </div>
+        <p style="font-size: 0.78rem; color: var(--text-tertiary); text-align: right;" id="xpText">
+          720 / 1500 XP (58%)
+        </p>
+
+        <div style="background: rgba(255,255,255,0.03); border-radius: 16px; padding: 12px; margin-top: 14px; font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; border: 1px solid rgba(255,255,255,0.06);">
+          💡 <strong>Sistema de Mérito:</strong> Suas mensagens concedem +15 XP. Sempre que você ajudar alguém e o membro agradecer com <em>"valeu", "obrigado" ou "tmj"</em>, o Knox recompensa você automaticamente com <strong>+50 XP</strong>!
+        </div>
+      </div>
+
+      <div class="liquid-card">
+        <div class="card-title">
+          <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18" style="color: #4b89ff;">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+          </svg>
+          <span>Hierarquia de Patentes</span>
+        </div>
+        <div class="cmd-tile" style="cursor: default;">
+          <span>🔌 Recruta Android</span>
+          <span class="cmd-desc">0 - 99 pts</span>
+        </div>
+        <div class="cmd-tile" style="cursor: default;">
+          <span>🛠️ Técnico Júnior</span>
+          <span class="cmd-desc">100 - 299 pts</span>
+        </div>
+        <div class="cmd-tile" style="cursor: default;">
+          <span>⚙️ Custom ROM Flasher</span>
+          <span class="cmd-desc">300 - 699 pts</span>
+        </div>
+        <div class="cmd-tile" style="cursor: default; border-color: rgba(46,110,255,0.4);">
+          <span style="color: #64a2ff; font-weight: 700;">
+            <svg class="knox-svg" viewBox="0 0 24 24" width="14" height="14">
               <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
             </svg>
             Knox Enforcer
           </span>
+          <span class="cmd-desc">700 - 1499 pts</span>
+        </div>
+        <div class="cmd-tile" style="cursor: default; border-color: rgba(255,215,0,0.35);">
+          <span style="color: #ffd700; font-weight: 700;">👑 Root Master (VIP)</span>
+          <span class="cmd-desc">1500+ pts</span>
         </div>
       </div>
+    </main>
 
-      <div class="card-title" style="margin-bottom: 2px;">
-        <span>Nível de Integridade & XP</span>
-      </div>
-      <div class="oneui-battery-bar">
-        <div class="oneui-battery-fill" id="progressFill" style="width: 58%;"></div>
-      </div>
-      <p style="font-size: 0.78rem; color: var(--text-tertiary); text-align: right;" id="xpText">
-        720 / 1500 XP (58%)
-      </p>
-
-      <div style="background: rgba(255,255,255,0.03); border-radius: 16px; padding: 12px; margin-top: 14px; font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; border: 1px solid rgba(255,255,255,0.06);">
-        💡 <strong>Sistema de Mérito:</strong> Suas mensagens concedem +15 XP. Sempre que você ajudar alguém e o membro agradecer com <em>"valeu", "obrigado" ou "tmj"</em>, o Knox recompensa você automaticamente com <strong>+50 XP</strong>!
-      </div>
-    </div>
-
-    <div class="liquid-card">
-      <div class="card-title">
-        <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18" style="color: #4b89ff;">
-          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
-        </svg>
-        <span>Hierarquia de Patentes</span>
-      </div>
-      <div class="cmd-tile" style="cursor: default;">
-        <span>🔌 Recruta Android</span>
-        <span class="cmd-desc">0 - 99 pts</span>
-      </div>
-      <div class="cmd-tile" style="cursor: default;">
-        <span>🛠️ Técnico Júnior</span>
-        <span class="cmd-desc">100 - 299 pts</span>
-      </div>
-      <div class="cmd-tile" style="cursor: default;">
-        <span>⚙️ Custom ROM Flasher</span>
-        <span class="cmd-desc">300 - 699 pts</span>
-      </div>
-      <div class="cmd-tile" style="cursor: default; border-color: rgba(46,110,255,0.4);">
-        <span style="color: #64a2ff; font-weight: 700;">
-          <svg class="knox-svg" viewBox="0 0 24 24" width="14" height="14">
+    <!-- ABA 4: ROM & OTA -->
+    <main id="view-roms" class="tab-view">
+      <div class="liquid-card">
+        <div class="card-title">
+          <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18" style="color: #4b89ff;">
             <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
           </svg>
-          Knox Enforcer
+          <span>Localizador de Firmware ZTO</span>
+        </div>
+        <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 12px;">
+          Insira o modelo do aparelho para abrir os pacotes oficiais para o Brasil (ZTO).
+        </p>
+
+        <input type="text" class="oneui-input" id="modelInput" placeholder="Ex: SM-S928B, SM-S918B, SM-A556E" />
+        
+        <button class="btn-liquid" style="margin-bottom: 8px;" onclick="buscarRom()">
+          <span>Baixar ROM Oficial (SamFw)</span>
+        </button>
+
+        <button class="btn-liquid" style="background: var(--glass-surface-sub); border: 1px solid var(--glass-border); box-shadow: none;" onclick="abrirChangelogSamsung()">
+          <span>Ver Histórico de Releases Samsung</span>
+        </button>
+      </div>
+
+      <div class="liquid-card">
+        <div class="card-title">
+          <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18" style="color: #4b89ff;">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+          </svg>
+          <span>Protocolo de Download Mode</span>
+        </div>
+        <div style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6;">
+          <p>1. Desligue completamente o seu dispositivo Galaxy.</p>
+          <p>2. Segure simultaneamente os botões <strong>Volume +</strong> e <strong>Volume -</strong>.</p>
+          <p>3. Conecte o cabo USB Type-C ao PC mantendo os dois botões pressionados.</p>
+          <p>4. Assim que a tela ciano aparecer, aperte <strong>Volume +</strong> para confirmar a entrada no modo Odin.</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- ABA 5: REGRAS -->
+    <main id="view-regras" class="tab-view">
+      <div class="liquid-card">
+        <div class="card-title">
+          <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18" style="color: #4b89ff;">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+          </svg>
+          <span>Diretrizes Oficiais da Comunidade</span>
+        </div>
+        <div style="font-size: 0.84rem; color: var(--text-secondary); line-height: 1.6;">
+          <p style="margin-bottom: 10px;">🛡️ <strong>Anti-Spam Adulto e Divulgação:</strong> Links não autorizados e contas com apelo impróprio são removidos no ato, e o ID entra na Blacklist permanente.</p>
+          <p style="margin-bottom: 10px;">🤬 <strong>Filtro de Palavras Impróprias:</strong> O bot muta automaticamente por 15 minutos membros que utilizarem linguajar agressivo ou ofensivo.</p>
+          <p style="margin-bottom: 10px;">⚠️ <strong>Limite de Advertências:</strong> Acumular 3 warns resulta em silenciamento de 3 dias no grupo.</p>
+          <p>📱 <strong>Ecossistema Samsung:</strong> Espaço dedicado à tecnologia, hardware, One UI, APKs limpos e desenvolvimento Android.</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Barra Inferior Deslizante -->
+  <div class="liquid-navbar-wrapper">
+    <nav class="liquid-navbar" id="liquidNav">
+      <button class="nav-item active" onclick="switchNav('ia')">
+        <span class="icon">✨</span>
+        <span class="label">Galaxy AI</span>
+      </button>
+      <button class="nav-item" onclick="switchNav('comandos')">
+        <span class="icon">⚡</span>
+        <span class="label">Moderação</span>
+      </button>
+      <button class="nav-item" onclick="switchNav('perfil')">
+        <span class="icon">
+          <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+          </svg>
         </span>
-        <span class="cmd-desc">700 - 1499 pts</span>
-      </div>
-      <div class="cmd-tile" style="cursor: default; border-color: rgba(255,215,0,0.35);">
-        <span style="color: #ffd700; font-weight: 700;">👑 Root Master (VIP)</span>
-        <span class="cmd-desc">1500+ pts</span>
-      </div>
-    </div>
-  </main>
-
-  <!-- ==================== ABA 4: ROMs, ODIN & OTA ==================== -->
-  <main id="view-roms" class="tab-view">
-    <div class="liquid-card">
-      <div class="card-title">
-        <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18" style="color: #4b89ff;">
-          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
-        </svg>
-        <span>Localizador de Firmware ZTO</span>
-      </div>
-      <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 12px;">
-        Insira o modelo do aparelho para abrir os pacotes oficiais para o Brasil (ZTO).
-      </p>
-
-      <input type="text" class="oneui-input" id="modelInput" placeholder="Ex: SM-S928B, SM-S918B, SM-A556E" />
-      
-      <button class="btn-liquid" style="margin-bottom: 8px;" onclick="buscarRom()">
-        <span>Baixar ROM Oficial (SamFw)</span>
+        <span class="label">Passaporte</span>
       </button>
-
-      <button class="btn-liquid" style="background: var(--glass-surface-sub); border: 1px solid var(--glass-border); box-shadow: none;" onclick="abrirChangelogSamsung()">
-        <span>Ver Histórico de Releases Samsung</span>
+      <button class="nav-item" onclick="switchNav('roms')">
+        <span class="icon">📦</span>
+        <span class="label">ROM & OTA</span>
       </button>
-    </div>
+      <button class="nav-item" onclick="switchNav('regras')">
+        <span class="icon">📜</span>
+        <span class="label">Regras</span>
+      </button>
+    </nav>
+  </div>
 
-    <div class="liquid-card">
-      <div class="card-title">
-        <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18" style="color: #4b89ff;">
-          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
-        </svg>
-        <span>Protocolo de Download Mode</span>
-      </div>
-      <div style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6;">
-        <p>1. Desligue completamente o seu dispositivo Galaxy.</p>
-        <p>2. Segure simultaneamente os botões <strong>Volume +</strong> e <strong>Volume -</strong>.</p>
-        <p>3. Conecte o cabo USB Type-C ao PC mantendo os dois botões pressionados.</p>
-        <p>4. Assim que a tela ciano aparecer, aperte <strong>Volume +</strong> para confirmar a entrada no modo Odin.</p>
-      </div>
-    </div>
-  </main>
-
-  <!-- ==================== ABA 5: DIRETRIZES & REGRAS ==================== -->
-  <main id="view-regras" class="tab-view">
-    <div class="liquid-card">
-      <div class="card-title">
-        <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18" style="color: #4b89ff;">
-          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
-        </svg>
-        <span>Diretrizes Oficiais da Comunidade</span>
-      </div>
-      <div style="font-size: 0.84rem; color: var(--text-secondary); line-height: 1.6;">
-        <p style="margin-bottom: 10px;">🚫 <strong>Anti-Spam Adulto e Divulgação:</strong> Links não autorizados e contas com apelo impróprio são removidos no ato, e o ID entra na Blacklist permanente.</p>
-        <p style="margin-bottom: 10px;">🤬 <strong>Filtro de Palavras Impróprias:</strong> O bot muta automaticamente por 15 minutos membros que utilizarem linguajar agressivo ou ofensivo.</p>
-        <p style="margin-bottom: 10px;">⚠️ <strong>Limite de Advertências:</strong> Acumular 3 warns resulta em silenciamento de 3 dias no grupo.</p>
-        <p>📱 <strong>Ecossistema Samsung:</strong> Espaço dedicado à tecnologia, hardware, One UI, APKs limpos e desenvolvimento Android.</p>
-      </div>
-    </div>
-  </main>
-
-  <!-- Liquid Glass Floating Pill Navbar -->
-  <nav class="liquid-navbar">
-    <button class="nav-item active" onclick="switchNav('ia')">
-      <span class="icon">✨</span>
-      <span class="label">Galaxy AI</span>
-    </button>
-    <button class="nav-item" onclick="switchNav('comandos')">
-      <span class="icon">⚡</span>
-      <span class="label">Moderação</span>
-    </button>
-    <button class="nav-item" onclick="switchNav('perfil')">
-      <span class="icon">
-        <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18">
-          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
-        </svg>
-      </span>
-      <span class="label">Passaporte</span>
-    </button>
-    <button class="nav-item" onclick="switchNav('roms')">
-      <span class="icon">📦</span>
-      <span class="label">ROM & OTA</span>
-    </button>
-    <button class="nav-item" onclick="switchNav('regras')">
-      <span class="icon">📜</span>
-      <span class="label">Regras</span>
-    </button>
-  </nav>
-
-  <!-- Toast Notificação Liquid Glass -->
   <div class="toast-liquid" id="toast">Comando copiado!</div>
 
   <script>
@@ -841,15 +885,21 @@
       }
     }
 
-    // WEBHOOK ATIVO DO N8N
     const N8N_WEBHOOK_URL = "https://lounge-spouse-procurement-then.trycloudflare.com/webhook/knox-app";
+    const tabsList = ['ia', 'comandos', 'perfil', 'roms', 'regras'];
+    let currentTabIndex = 0;
 
     function switchNav(tabName) {
+      const idx = tabsList.indexOf(tabName);
+      if (idx !== -1) currentTabIndex = idx;
+
       if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
 
-      const navs = ['ia', 'comandos', 'perfil', 'roms', 'regras'];
-      document.querySelectorAll('.nav-item').forEach((item, idx) => {
-        item.classList.toggle('active', navs[idx] === tabName);
+      document.querySelectorAll('.nav-item').forEach((item, i) => {
+        item.classList.toggle('active', tabsList[i] === tabName);
+        if (tabsList[i] === tabName) {
+          item.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
       });
 
       document.querySelectorAll('.tab-view').forEach(view => {
@@ -859,6 +909,45 @@
       const activeView = document.getElementById(`view-${tabName}`);
       if (activeView) activeView.classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* Detecção de Gesto de Deslizar (Swipe) */
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+    let touchEndY = 0;
+
+    const swipeContainer = document.getElementById('swipe-container');
+
+    swipeContainer.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    swipeContainer.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      touchEndY = e.changedTouches[0].screenY;
+      handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+      const diffX = touchEndX - touchStartX;
+      const diffY = touchEndY - touchStartY;
+
+      // Prioriza deslize horizontal e descarta rolagem vertical
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 55) {
+        if (diffX < 0) {
+          // Desliza para a esquerda -> Próxima Aba
+          if (currentTabIndex < tabsList.length - 1) {
+            switchNav(tabsList[currentTabIndex + 1]);
+          }
+        } else {
+          // Desliza para a direita -> Aba Anterior
+          if (currentTabIndex > 0) {
+            switchNav(tabsList[currentTabIndex - 1]);
+          }
+        }
+      }
     }
 
     function setPrompt(text) {
@@ -893,7 +982,14 @@
 
         const data = await res.json();
         const texto = data.resposta || "Nenhuma resposta retornada pelo Knox.";
-        box.innerHTML = marked.parse(texto);
+        
+        let parsedHtml = marked.parse(texto);
+        
+        // Envolve qualquer tabela gerada em um container com rolagem horizontal limpa
+        parsedHtml = parsedHtml.replace(/<table>/g, '<div class="table-responsive"><table>');
+        parsedHtml = parsedHtml.replace(/<\/table>/g, '</table></div>');
+
+        box.innerHTML = parsedHtml;
         if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
       } catch (err) {
         console.error(err);
