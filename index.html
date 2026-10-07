@@ -85,10 +85,14 @@
       100% { transform: translate(35px, 45px) scale(1.12); }
     }
 
+    /* Ícone Samsung Knox Oficial (Baseado na imagem enviada) */
     .knox-svg {
       display: inline-block;
       vertical-align: middle;
-      fill: currentColor;
+      stroke: currentColor;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
       flex-shrink: 0;
     }
 
@@ -133,7 +137,6 @@
       font-weight: 500;
     }
 
-    /* Container com suporte a Swipe */
     #swipe-container {
       width: 100%;
       position: relative;
@@ -271,7 +274,6 @@
       box-shadow: none;
     }
 
-    /* Card de Resposta e Correção de Tabelas Markdown */
     .response-card {
       background: rgba(10, 14, 24, 0.88);
       border: 1px solid rgba(46, 110, 255, 0.35);
@@ -287,7 +289,6 @@
       word-break: break-word;
     }
 
-    /* Wrapper automático para rolagem de tabela */
     .table-responsive {
       width: 100%;
       overflow-x: auto;
@@ -452,7 +453,6 @@
       border-color: var(--oneui-accent);
     }
 
-    /* Barra Inferior com Suporte a Deslize / Rolagem */
     .liquid-navbar-wrapper {
       position: fixed;
       bottom: 14px;
@@ -562,16 +562,23 @@
   <div class="liquid-orb orb-2"></div>
   <div class="liquid-orb orb-3"></div>
 
+  <!-- Header One UI Large Display -->
   <header class="oneui-header">
     <div class="oneui-badge">
-      <svg class="knox-svg" viewBox="0 0 24 24" width="13" height="13">
-        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+      <!-- ÍCONE SAMSUNG KNOX OFICIAL -->
+      <svg class="knox-svg" viewBox="0 0 100 100" width="13" height="13" stroke-width="8">
+        <path d="M 18,34 L 18,48 L 50,38 L 82,48 L 82,34 L 70,30 L 70,20 L 58,20 L 58,26 L 42,26 L 42,20 L 30,20 L 30,30 Z"/>
+        <path d="M 18,57 L 50,47 L 82,57 L 82,65 L 50,55 L 26,62 L 50,71 L 76,62 L 76,71 L 50,80 L 18,69 Z"/>
+        <path d="M 38,82 L 50,87 L 68,78"/>
       </svg>
       One UI 9 • Galaxy Ecosystem
     </div>
     <h1>
-      <svg class="knox-svg" viewBox="0 0 24 24" width="28" height="28" style="color: #4b89ff;">
-        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+      <!-- ÍCONE SAMSUNG KNOX OFICIAL NO TÍTULO -->
+      <svg class="knox-svg" viewBox="0 0 100 100" width="28" height="28" stroke-width="7.5" style="color: #4b89ff;">
+        <path d="M 18,34 L 18,48 L 50,38 L 82,48 L 82,34 L 70,30 L 70,20 L 58,20 L 58,26 L 42,26 L 42,20 L 30,20 L 30,30 Z"/>
+        <path d="M 18,57 L 50,47 L 82,57 L 82,65 L 50,55 L 26,62 L 50,71 L 76,62 L 76,71 L 50,80 L 18,69 Z"/>
+        <path d="M 38,82 L 50,87 L 68,78"/>
       </svg>
       Knox Assistant
     </h1>
@@ -583,8 +590,10 @@
     <main id="view-ia" class="tab-view active">
       <div class="liquid-card">
         <div class="card-title">
-          <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18" style="color: #4b89ff;">
-            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+          <svg class="knox-svg" viewBox="0 0 100 100" width="18" height="18" stroke-width="8" style="color: #4b89ff;">
+            <path d="M 18,34 L 18,48 L 50,38 L 82,48 L 82,34 L 70,30 L 70,20 L 58,20 L 58,26 L 42,26 L 42,20 L 30,20 L 30,30 Z"/>
+            <path d="M 18,57 L 50,47 L 82,57 L 82,65 L 50,55 L 26,62 L 50,71 L 76,62 L 76,71 L 50,80 L 18,69 Z"/>
+            <path d="M 38,82 L 50,87 L 68,78"/>
           </svg>
           <span>Galaxy AI • Diagnóstico Técnico</span>
         </div>
@@ -601,8 +610,10 @@
         </div>
 
         <button class="btn-liquid" id="btnSubmit" onclick="perguntarKnox()">
-          <svg class="knox-svg" viewBox="0 0 24 24" width="16" height="16">
-            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+          <svg class="knox-svg" viewBox="0 0 100 100" width="16" height="16" stroke-width="8">
+            <path d="M 18,34 L 18,48 L 50,38 L 82,48 L 82,34 L 70,30 L 70,20 L 58,20 L 58,26 L 42,26 L 42,20 L 30,20 L 30,30 Z"/>
+            <path d="M 18,57 L 50,47 L 82,57 L 82,65 L 50,55 L 26,62 L 50,71 L 76,62 L 76,71 L 50,80 L 18,69 Z"/>
+            <path d="M 38,82 L 50,87 L 68,78"/>
           </svg>
           <span>Consultar Galaxy AI</span>
         </button>
@@ -615,8 +626,10 @@
     <main id="view-comandos" class="tab-view">
       <div class="liquid-card">
         <div class="card-title">
-          <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18" style="color: #4b89ff;">
-            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+          <svg class="knox-svg" viewBox="0 0 100 100" width="18" height="18" stroke-width="8" style="color: #4b89ff;">
+            <path d="M 18,34 L 18,48 L 50,38 L 82,48 L 82,34 L 70,30 L 70,20 L 58,20 L 58,26 L 42,26 L 42,20 L 30,20 L 30,30 Z"/>
+            <path d="M 18,57 L 50,47 L 82,57 L 82,65 L 50,55 L 26,62 L 50,71 L 76,62 L 76,71 L 50,80 L 18,69 Z"/>
+            <path d="M 38,82 L 50,87 L 68,78"/>
           </svg>
           <span>Ações Rápidas de Moderação</span>
         </div>
@@ -688,8 +701,10 @@
 
       <div class="liquid-card">
         <div class="card-title">
-          <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18" style="color: #ff4757;">
-            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+          <svg class="knox-svg" viewBox="0 0 100 100" width="18" height="18" stroke-width="8" style="color: #ff4757;">
+            <path d="M 18,34 L 18,48 L 50,38 L 82,48 L 82,34 L 70,30 L 70,20 L 58,20 L 58,26 L 42,26 L 42,20 L 30,20 L 30,30 Z"/>
+            <path d="M 18,57 L 50,47 L 82,57 L 82,65 L 50,55 L 26,62 L 50,71 L 76,62 L 76,71 L 50,80 L 18,69 Z"/>
+            <path d="M 38,82 L 50,87 L 68,78"/>
           </svg>
           <span>Gerenciamento de Blacklist (PV)</span>
         </div>
@@ -715,16 +730,20 @@
       <div class="liquid-card">
         <div class="profile-hero">
           <div class="avatar-squircle">
-            <svg class="knox-svg" viewBox="0 0 24 24" width="32" height="32" style="color: #fff;">
-              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+            <svg class="knox-svg" viewBox="0 0 100 100" width="32" height="32" stroke-width="8" style="color: #fff;">
+              <path d="M 18,34 L 18,48 L 50,38 L 82,48 L 82,34 L 70,30 L 70,20 L 58,20 L 58,26 L 42,26 L 42,20 L 30,20 L 30,30 Z"/>
+              <path d="M 18,57 L 50,47 L 82,57 L 82,65 L 50,55 L 26,62 L 50,71 L 76,62 L 76,71 L 50,80 L 18,69 Z"/>
+              <path d="M 38,82 L 50,87 L 68,78"/>
             </svg>
           </div>
           <div class="profile-info">
             <h3 id="userName">Usuário Galaxy</h3>
             <p id="userHandle">@comunidade</p>
             <span class="pill-badge" id="userRank">
-              <svg class="knox-svg" viewBox="0 0 24 24" width="11" height="11">
-                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+              <svg class="knox-svg" viewBox="0 0 100 100" width="11" height="11" stroke-width="9">
+                <path d="M 18,34 L 18,48 L 50,38 L 82,48 L 82,34 L 70,30 L 70,20 L 58,20 L 58,26 L 42,26 L 42,20 L 30,20 L 30,30 Z"/>
+                <path d="M 18,57 L 50,47 L 82,57 L 82,65 L 50,55 L 26,62 L 50,71 L 76,62 L 76,71 L 50,80 L 18,69 Z"/>
+                <path d="M 38,82 L 50,87 L 68,78"/>
               </svg>
               Knox Enforcer
             </span>
@@ -748,8 +767,10 @@
 
       <div class="liquid-card">
         <div class="card-title">
-          <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18" style="color: #4b89ff;">
-            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+          <svg class="knox-svg" viewBox="0 0 100 100" width="18" height="18" stroke-width="8" style="color: #4b89ff;">
+            <path d="M 18,34 L 18,48 L 50,38 L 82,48 L 82,34 L 70,30 L 70,20 L 58,20 L 58,26 L 42,26 L 42,20 L 30,20 L 30,30 Z"/>
+            <path d="M 18,57 L 50,47 L 82,57 L 82,65 L 50,55 L 26,62 L 50,71 L 76,62 L 76,71 L 50,80 L 18,69 Z"/>
+            <path d="M 38,82 L 50,87 L 68,78"/>
           </svg>
           <span>Hierarquia de Patentes</span>
         </div>
@@ -766,9 +787,11 @@
           <span class="cmd-desc">300 - 699 pts</span>
         </div>
         <div class="cmd-tile" style="cursor: default; border-color: rgba(46,110,255,0.4);">
-          <span style="color: #64a2ff; font-weight: 700;">
-            <svg class="knox-svg" viewBox="0 0 24 24" width="14" height="14">
-              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+          <span style="color: #64a2ff; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+            <svg class="knox-svg" viewBox="0 0 100 100" width="14" height="14" stroke-width="8">
+              <path d="M 18,34 L 18,48 L 50,38 L 82,48 L 82,34 L 70,30 L 70,20 L 58,20 L 58,26 L 42,26 L 42,20 L 30,20 L 30,30 Z"/>
+              <path d="M 18,57 L 50,47 L 82,57 L 82,65 L 50,55 L 26,62 L 50,71 L 76,62 L 76,71 L 50,80 L 18,69 Z"/>
+              <path d="M 38,82 L 50,87 L 68,78"/>
             </svg>
             Knox Enforcer
           </span>
@@ -785,8 +808,10 @@
     <main id="view-roms" class="tab-view">
       <div class="liquid-card">
         <div class="card-title">
-          <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18" style="color: #4b89ff;">
-            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+          <svg class="knox-svg" viewBox="0 0 100 100" width="18" height="18" stroke-width="8" style="color: #4b89ff;">
+            <path d="M 18,34 L 18,48 L 50,38 L 82,48 L 82,34 L 70,30 L 70,20 L 58,20 L 58,26 L 42,26 L 42,20 L 30,20 L 30,30 Z"/>
+            <path d="M 18,57 L 50,47 L 82,57 L 82,65 L 50,55 L 26,62 L 50,71 L 76,62 L 76,71 L 50,80 L 18,69 Z"/>
+            <path d="M 38,82 L 50,87 L 68,78"/>
           </svg>
           <span>Localizador de Firmware ZTO</span>
         </div>
@@ -807,8 +832,10 @@
 
       <div class="liquid-card">
         <div class="card-title">
-          <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18" style="color: #4b89ff;">
-            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+          <svg class="knox-svg" viewBox="0 0 100 100" width="18" height="18" stroke-width="8" style="color: #4b89ff;">
+            <path d="M 18,34 L 18,48 L 50,38 L 82,48 L 82,34 L 70,30 L 70,20 L 58,20 L 58,26 L 42,26 L 42,20 L 30,20 L 30,30 Z"/>
+            <path d="M 18,57 L 50,47 L 82,57 L 82,65 L 50,55 L 26,62 L 50,71 L 76,62 L 76,71 L 50,80 L 18,69 Z"/>
+            <path d="M 38,82 L 50,87 L 68,78"/>
           </svg>
           <span>Protocolo de Download Mode</span>
         </div>
@@ -825,13 +852,15 @@
     <main id="view-regras" class="tab-view">
       <div class="liquid-card">
         <div class="card-title">
-          <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18" style="color: #4b89ff;">
-            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+          <svg class="knox-svg" viewBox="0 0 100 100" width="18" height="18" stroke-width="8" style="color: #4b89ff;">
+            <path d="M 18,34 L 18,48 L 50,38 L 82,48 L 82,34 L 70,30 L 70,20 L 58,20 L 58,26 L 42,26 L 42,20 L 30,20 L 30,30 Z"/>
+            <path d="M 18,57 L 50,47 L 82,57 L 82,65 L 50,55 L 26,62 L 50,71 L 76,62 L 76,71 L 50,80 L 18,69 Z"/>
+            <path d="M 38,82 L 50,87 L 68,78"/>
           </svg>
           <span>Diretrizes Oficiais da Comunidade</span>
         </div>
         <div style="font-size: 0.84rem; color: var(--text-secondary); line-height: 1.6;">
-          <p style="margin-bottom: 10px;">🛡️ <strong>Anti-Spam Adulto e Divulgação:</strong> Links não autorizados e contas com apelo impróprio são removidos no ato, e o ID entra na Blacklist permanente.</p>
+          <p style="margin-bottom: 10px;">🚫 <strong>Anti-Spam Adulto e Divulgação:</strong> Links não autorizados e contas com apelo impróprio são removidos no ato, e o ID entra na Blacklist permanente.</p>
           <p style="margin-bottom: 10px;">🤬 <strong>Filtro de Palavras Impróprias:</strong> O bot muta automaticamente por 15 minutos membros que utilizarem linguajar agressivo ou ofensivo.</p>
           <p style="margin-bottom: 10px;">⚠️ <strong>Limite de Advertências:</strong> Acumular 3 warns resulta em silenciamento de 3 dias no grupo.</p>
           <p>📱 <strong>Ecossistema Samsung:</strong> Espaço dedicado à tecnologia, hardware, One UI, APKs limpos e desenvolvimento Android.</p>
@@ -853,8 +882,11 @@
       </button>
       <button class="nav-item" onclick="switchNav('perfil')">
         <span class="icon">
-          <svg class="knox-svg" viewBox="0 0 24 24" width="18" height="18">
-            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+          <!-- ÍCONE KNOX OFICIAL NA NAVBAR -->
+          <svg class="knox-svg" viewBox="0 0 100 100" width="18" height="18" stroke-width="8">
+            <path d="M 18,34 L 18,48 L 50,38 L 82,48 L 82,34 L 70,30 L 70,20 L 58,20 L 58,26 L 42,26 L 42,20 L 30,20 L 30,30 Z"/>
+            <path d="M 18,57 L 50,47 L 82,57 L 82,65 L 50,55 L 26,62 L 50,71 L 76,62 L 76,71 L 50,80 L 18,69 Z"/>
+            <path d="M 38,82 L 50,87 L 68,78"/>
           </svg>
         </span>
         <span class="label">Passaporte</span>
@@ -911,7 +943,6 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    /* Detecção de Gesto de Deslizar (Swipe) */
     let touchStartX = 0;
     let touchStartY = 0;
     let touchEndX = 0;
@@ -934,15 +965,12 @@
       const diffX = touchEndX - touchStartX;
       const diffY = touchEndY - touchStartY;
 
-      // Prioriza deslize horizontal e descarta rolagem vertical
       if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 55) {
         if (diffX < 0) {
-          // Desliza para a esquerda -> Próxima Aba
           if (currentTabIndex < tabsList.length - 1) {
             switchNav(tabsList[currentTabIndex + 1]);
           }
         } else {
-          // Desliza para a direita -> Aba Anterior
           if (currentTabIndex > 0) {
             switchNav(tabsList[currentTabIndex - 1]);
           }
@@ -985,7 +1013,6 @@
         
         let parsedHtml = marked.parse(texto);
         
-        // Envolve qualquer tabela gerada em um container com rolagem horizontal limpa
         parsedHtml = parsedHtml.replace(/<table>/g, '<div class="table-responsive"><table>');
         parsedHtml = parsedHtml.replace(/<\/table>/g, '</table></div>');
 
@@ -998,8 +1025,10 @@
       } finally {
         btn.disabled = false;
         btn.innerHTML = `
-          <svg class="knox-svg" viewBox="0 0 24 24" width="16" height="16">
-            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+          <svg class="knox-svg" viewBox="0 0 100 100" width="16" height="16" stroke-width="8">
+            <path d="M 18,34 L 18,48 L 50,38 L 82,48 L 82,34 L 70,30 L 70,20 L 58,20 L 58,26 L 42,26 L 42,20 L 30,20 L 30,30 Z"/>
+            <path d="M 18,57 L 50,47 L 82,57 L 82,65 L 50,55 L 26,62 L 50,71 L 76,62 L 76,71 L 50,80 L 18,69 Z"/>
+            <path d="M 38,82 L 50,87 L 68,78"/>
           </svg>
           <span>Consultar Galaxy AI</span>`;
       }
