@@ -632,6 +632,38 @@
           <span>Ações Rápidas de Moderação</span>
         </div>
 
+        <div class="cmd-tile" onclick="copiarComando('/painel')">
+          <div>
+            <span class="cmd-pill">/painel</span>
+            <div class="cmd-desc" style="margin-top: 4px;">Abre o menu interativo (XP, Blacklist, Avisos)</div>
+          </div>
+          <span>📋</span>
+        </div>
+
+        <div class="cmd-tile" onclick="copiarComando('/zerarxp')">
+          <div>
+            <span class="cmd-pill">/zerarxp</span>
+            <div class="cmd-desc" style="margin-top: 4px;">Zera globalmente o XP e patentes</div>
+          </div>
+          <span>📋</span>
+        </div>
+
+        <div class="cmd-tile" onclick="copiarComando('/unbanall')">
+          <div>
+            <span class="cmd-pill">/unbanall</span>
+            <div class="cmd-desc" style="margin-top: 4px;">Limpa toda a lista negra do grupo</div>
+          </div>
+          <span>📋</span>
+        </div>
+
+        <div class="cmd-tile" onclick="copiarComando('/unmuteall')">
+          <div>
+            <span class="cmd-pill">/unmuteall</span>
+            <div class="cmd-desc" style="margin-top: 4px;">Zera as advertências de todos (Anistia)</div>
+          </div>
+          <span>📋</span>
+        </div>
+
         <div class="cmd-tile" onclick="copiarComando('/warn')">
           <div>
             <span class="cmd-pill">/warn</span>
@@ -643,7 +675,7 @@
         <div class="cmd-tile" onclick="copiarComando('/unwarn')">
           <div>
             <span class="cmd-pill">/unwarn</span>
-            <div class="cmd-desc" style="margin-top: 4px;">Remove a última advertência</div>
+            <div class="cmd-desc" style="margin-top: 4px;">Remove a última advertência do usuário</div>
           </div>
           <span>📋</span>
         </div>
@@ -651,7 +683,7 @@
         <div class="cmd-tile" onclick="copiarComando('/resetwarns')">
           <div>
             <span class="cmd-pill">/resetwarns</span>
-            <div class="cmd-desc" style="margin-top: 4px;">Zera o contador do membro (0/3)</div>
+            <div class="cmd-desc" style="margin-top: 4px;">Zera o contador de advertências (0/3)</div>
           </div>
           <span>📋</span>
         </div>
@@ -676,6 +708,14 @@
           <div>
             <span class="cmd-pill">/ban</span>
             <div class="cmd-desc" style="margin-top: 4px;">Expulsa e adiciona à Blacklist</div>
+          </div>
+          <span>📋</span>
+        </div>
+
+        <div class="cmd-tile" onclick="copiarComando('/unban')">
+          <div>
+            <span class="cmd-pill">/unban</span>
+            <div class="cmd-desc" style="margin-top: 4px;">Remove o banimento do membro</div>
           </div>
           <span>📋</span>
         </div>
@@ -762,7 +802,7 @@
         </p>
 
         <div style="background: rgba(255,255,255,0.03); border-radius: 16px; padding: 12px; margin-top: 14px; font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; border: 1px solid rgba(255,255,255,0.06);">
-          💡 <strong>Sistema de Mérito:</strong> Suas mensagens concedem +15 XP. Sempre que você ajudar alguém e o membro agradecer com <em>"valeu", "obrigado" ou "tmj"</em>, o Knox recompensa você automaticamente com <strong>+50 XP</strong>!
+          💡 <strong>Sistema de Mérito:</strong> Suas mensagens concedem +10 XP no daily. Sempre que você ajudar alguém e o membro agradecer com <em>"valeu", "obrigado" ou "tmj"</em>, o Knox recompensa você automaticamente com <strong>+50 XP</strong>!
         </div>
       </div>
 
@@ -866,10 +906,12 @@
           <span>Diretrizes Oficiais da Comunidade</span>
         </div>
         <div style="font-size: 0.84rem; color: var(--text-secondary); line-height: 1.6;">
-          <p style="margin-bottom: 10px;">🛡️ <strong>Anti-Spam Adulto e Divulgação:</strong> Links não autorizados e contas com apelo impróprio são removidos no ato, e o ID entra na Blacklist permanente.</p>
-          <p style="margin-bottom: 10px;">🤬 <strong>Filtro de Palavras Impróprias:</strong> O bot muta automaticamente por 15 minutos membros que utilizarem linguajar agressivo ou ofensivo.</p>
-          <p style="margin-bottom: 10px;">⚠️ <strong>Limite de Advertências:</strong> Acumular 3 warns resulta em silenciamento de 3 dias no grupo.</p>
-          <p>📱 <strong>Ecossistema Samsung:</strong> Espaço dedicado à tecnologia, hardware, One UI, APKs limpos e desenvolvimento Android.</p>
+          <p style="margin-bottom: 10px;">🛡️ <strong>Anti-Spam Adulto e Links Irregulares:</strong> Links não autorizados (+18, privacy, onlyfans) são removidos instantaneamente. O usuário é expulso e seu ID entra na Blacklist permanente.</p>
+          <p style="margin-bottom: 10px;">🤬 <strong>Filtro de Palavras Impróprias:</strong> O bot muta automaticamente por 15 minutos membros que utilizarem linguajar agressivo, ofensivo ou palavrões.</p>
+          <p style="margin-bottom: 10px;">⚠️ <strong>Sistema de Advertências (Warns):</strong> Acumular 3 advertências dadas pelos administradores resulta em silenciamento automático de 3 dias no grupo.</p>
+          <p style="margin-bottom: 10px;">🏆 <strong>Sistema de Mérito (XP):</strong> Membros ganham +10 XP no <code>/daily</code> e +50 XP ao ajudar outros usuários (quando agradecidos). O ranking pode ser zerado a qualquer momento para uma nova temporada.</p>
+          <p style="margin-bottom: 10px;">🚨 <strong>Uso do /report:</strong> Utilize o comando de denúncia com responsabilidade, apenas respondendo a mensagens que quebram as regras. Falsas denúncias podem gerar punição.</p>
+          <p>📱 <strong>Foco no Ecossistema Samsung:</strong> O grupo é um espaço dedicado à tecnologia, hardware, sistema One UI, atualizações via Odin, APKs limpos e desenvolvimento Android.</p>
         </div>
       </div>
     </main>
